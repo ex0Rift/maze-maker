@@ -8,17 +8,22 @@ int main(){
     // Initialisation
     //==
 
-    Map map(1);
+    Map map({5,5});
 
     //vars
-    const int rows = 4;
-    const int collumns = 4;
+
+    // true = 3D false = 2D
+    bool camera_mode = true;
+
+    const int rows = 5;
+    const int collumns = 5;
     std::array<std::array<int, rows>,collumns> tile_map =
     {{
-        {0,1,0,0},
-        {0,0,0,0},
-        {1,0,0,1},
-        {1,1,1,1}
+        {0,1,0,0,1},
+        {0,0,0,0,0},
+        {0,0,0,1,0},
+        {1,0,0,0,0},
+        {0,0,0,0,1}
     }};
 
     int scale = 5;
@@ -45,6 +50,10 @@ int main(){
         //Logic
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
+        //change camera mode if "1" key is pressed 
+        if (IsKeyPressed(KEY_ONE)) {
+            camera_mode = !camera_mode;
+        }
 
 
         //--
@@ -57,13 +66,13 @@ int main(){
                 for (int i = 0; i < rows; i++){
                     for (int j = 0; j < collumns; j++){
                         if (tile_map[i][j] == 1){
-                            DrawCube({i*scale,2.5f,j*scale},scale,5.0f,scale,GREEN);
+                            DrawCube({(i*scale)+2.5f,2.5f,(j*scale)+2.5f},scale,5.0f,scale,GREEN);
                         }
                     }
                 }
 
 
-                DrawGrid(30,1.0f);
+                DrawGrid(30,5.0f);
             EndMode3D();
 
             DrawFPS(10,10);
