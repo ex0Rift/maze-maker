@@ -2,6 +2,7 @@
 echo "Compiling..."
 g++ \
     src/main.cpp \
+    src/map.cpp \
     -I include \
     -o build \
     -lraylib -lm -ldl -lGL -pthread

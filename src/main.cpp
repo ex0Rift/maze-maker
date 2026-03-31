@@ -1,9 +1,29 @@
+#include <iostream>
+#include <array>
 #include "raylib.h"
+#include "map.hpp"
 
 int main(){
     //==
     // Initialisation
     //==
+
+    Map map(1);
+
+    //vars
+    const int rows = 4;
+    const int collumns = 4;
+    std::array<std::array<int, rows>,collumns> tile_map =
+    {{
+        {0,1,0,0},
+        {0,0,0,0},
+        {1,0,0,1},
+        {1,1,1,1}
+    }};
+
+    int scale = 5;
+
+    //window setup
     InitWindow(1000,600,"3d-raylib");
     SetTargetFPS(60);
 
@@ -34,8 +54,13 @@ int main(){
             ClearBackground(RAYWHITE);
 
             BeginMode3D(camera);
-
-                DrawCube({0.0f, 1.0f, 0.0f},2.0f,2.0f,2.0f,RED);
+                for (int i = 0; i < rows; i++){
+                    for (int j = 0; j < collumns; j++){
+                        if (tile_map[i][j] == 1){
+                            DrawCube({i*scale,2.5f,j*scale},scale,5.0f,scale,GREEN);
+                        }
+                    }
+                }
 
 
                 DrawGrid(30,1.0f);
