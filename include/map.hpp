@@ -9,4 +9,7 @@ public:
     int scale;
 
     Map(Vector2 inp_map_perams, int inp_scale);
+    
+    void AddSegment(int x, int y);
+    void AddWall(Vector2 first, Vector2 last);
 };

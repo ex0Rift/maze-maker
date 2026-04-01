@@ -7,7 +7,7 @@ int main(){
     //==
     // Initialisation
     //==
-    Map map({5,5},5);
+    Map map({6,6},5);
 
     //vars
 
@@ -36,8 +36,7 @@ int main(){
     topDown.fovy = 40.0f;
     topDown.projection = CAMERA_ORTHOGRAPHIC;
 
-
-    map.tile_map[2][2] = 1;
+    map.AddWall({1,5},{1,1});
 
     //==
     // Mainloop
@@ -52,6 +51,9 @@ int main(){
             camera_mode = !camera_mode;
         }
 
+        //if camera is in topdown view make cursour enabled, if not disabled
+        if (!camera_mode) EnableCursor();
+        else DisableCursor();
 
         //--
         //Drawing
@@ -64,8 +66,19 @@ int main(){
                 //drawing the map
                 for (int i = 0; i < map.map_perams.y; i++){
                     for (int j = 0; j < map.map_perams.x; j++){
+                        //code for drawing wall segments -- split up for ease of reading
                         if (map.tile_map[i][j] == 1){
-                            DrawCube({(i*map.scale)+2.5f,2.5f,(j*map.scale)+2.5f},map.scale,5.0f,map.scale,GREEN);
+                            DrawCube(
+                                {
+                                    (i*map.scale)+2.5f-((map.map_perams.x*map.scale)/2),
+                                    2.5f,
+                                    (j*map.scale)+2.5f-((map.map_perams.y*map.scale)/2)
+                                },
+                                map.scale,
+                                5.0f,
+                                map.scale,
+                                GREEN
+                            );
                         }
                     }
                 }
