@@ -7,26 +7,12 @@ int main(){
     //==
     // Initialisation
     //==
-
-    Map map({5,5});
+    Map map({5,5},5);
 
     //vars
 
-    // true = 3D false = 2D
+    // true = 3D false = topdown
     bool camera_mode = true;
-
-    const int rows = 5;
-    const int collumns = 5;
-    std::array<std::array<int, rows>,collumns> tile_map =
-    {{
-        {0,1,0,0,1},
-        {0,0,0,0,0},
-        {0,0,0,1,0},
-        {1,0,0,0,0},
-        {0,0,0,0,1}
-    }};
-
-    int scale = 5;
 
     //window setup
     InitWindow(1000,600,"3d-raylib");
@@ -35,12 +21,23 @@ int main(){
     DisableCursor();
 
     //camera for 3D
-    Camera camera = {0};
+    Camera3D camera = {0};
     camera.position = (Vector3){10.0f, 2.0f, 10.0f};
     camera.target = (Vector3){0.0f, 0.0f, 0.0f};
     camera.up = (Vector3){0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
+
+    //camera for top down view
+    Camera3D topDown = {0};
+    topDown.position = (Vector3){0.0f, 200.0f, 0.0f};
+    topDown.target = (Vector3){0.0f, 0.0f, 0.0f};
+    topDown.up = (Vector3){0.0f, 0.0f, -1.0f};
+    topDown.fovy = 40.0f;
+    topDown.projection = CAMERA_ORTHOGRAPHIC;
+
+
+    map.tile_map[2][2] = 1;
 
     //==
     // Mainloop
@@ -61,19 +58,25 @@ int main(){
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-
-            BeginMode3D(camera);
-                for (int i = 0; i < rows; i++){
-                    for (int j = 0; j < collumns; j++){
-                        if (tile_map[i][j] == 1){
-                            DrawCube({(i*scale)+2.5f,2.5f,(j*scale)+2.5f},scale,5.0f,scale,GREEN);
+            if (camera_mode)BeginMode3D(camera);
+            if (!camera_mode)BeginMode3D(topDown);
+                
+                //drawing the map
+                for (int i = 0; i < map.map_perams.y; i++){
+                    for (int j = 0; j < map.map_perams.x; j++){
+                        if (map.tile_map[i][j] == 1){
+                            DrawCube({(i*map.scale)+2.5f,2.5f,(j*map.scale)+2.5f},map.scale,5.0f,map.scale,GREEN);
                         }
                     }
                 }
 
+                //centre point marker
+                DrawCube({0.0f,2.5f,0.0f},2.0f,5.0f,1.0f,RED);
 
+                //draw the floor grid
                 DrawGrid(30,5.0f);
-            EndMode3D();
+            if (camera_mode)EndMode3D();
+            if (!camera_mode)EndMode3D();
 
             DrawFPS(10,10);
         EndDrawing();

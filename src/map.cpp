@@ -3,9 +3,10 @@
 #include <vector>
 
 
-Map::Map(Vector2 inp_map_perams)
+Map::Map(Vector2 inp_map_perams, int inp_scale)
 {
     map_perams = inp_map_perams;
+    scale = inp_scale;
 
     //resize the map size to desired size
     tile_map.resize(map_perams.y);

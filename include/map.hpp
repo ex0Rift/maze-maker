@@ -3,10 +3,10 @@
 #include "raylib.h"
 
 class Map{
-private:
-    Vector2 map_perams;
 public:
     std::vector<std::vector<int>> tile_map;
+    Vector2 map_perams;
+    int scale;
 
-    Map(Vector2 inp_map_perams);
+    Map(Vector2 inp_map_perams, int inp_scale);
 };
