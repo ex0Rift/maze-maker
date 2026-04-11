@@ -20,7 +20,12 @@ Map::Map(Vector2 inp_map_perams, int inp_scale)
 
 void Map::AddSegment(int x, int y)
 {
-    tile_map[y][x] = 1;
+    tile_map[x][y] = 1;
+}
+
+void Map::RemoveSegment(int x, int y)
+{
+    tile_map[x][y] = 0;
 }
 
 void Map::AddWall(Vector2 first, Vector2 last)

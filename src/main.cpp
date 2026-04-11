@@ -7,15 +7,16 @@ int main(){
     //==
     // Initialisation
     //==
-    Map map({6,6},5);
+    Map map({8,16},5);
 
     //vars
 
     // true = 3D false = topdown
     bool camera_mode = true;
+    Vector2 mousePos;
 
     //window setup
-    InitWindow(1000,600,"3d-raylib");
+    InitWindow(1200,600,"3d-raylib");
     SetTargetFPS(60);
 
     DisableCursor();
@@ -36,7 +37,6 @@ int main(){
     topDown.fovy = 40.0f;
     topDown.projection = CAMERA_ORTHOGRAPHIC;
 
-    map.AddWall({1,5},{1,1});
 
     //==
     // Mainloop
@@ -46,14 +46,26 @@ int main(){
         //Logic
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
-        //change camera mode if "1" key is pressed 
+        //change camera mode if "1" key is pressed and changes cursor state
         if (IsKeyPressed(KEY_ONE)) {
             camera_mode = !camera_mode;
+            if (!camera_mode) EnableCursor();
+            else DisableCursor();
         }
 
-        //if camera is in topdown view make cursour enabled, if not disabled
-        if (!camera_mode) EnableCursor();
-        else DisableCursor();
+        //if in top down camera track mouse for button presses and location
+        if (!camera_mode)
+        {
+            mousePos = GetMousePosition();
+            
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                Vector2 relMousePos = {(int)mousePos.x / 75, (int)mousePos.y / 75};
+                map.AddSegment(relMousePos.x,relMousePos.y);
+            } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)){
+                Vector2 relMousePos = {(int)mousePos.x / 75, (int)mousePos.y / 75};
+                map.RemoveSegment(relMousePos.x,relMousePos.y);
+            }
+        }
 
         //--
         //Drawing
@@ -70,9 +82,9 @@ int main(){
                         if (map.tile_map[i][j] == 1){
                             DrawCube(
                                 {
-                                    (i*map.scale)+2.5f-((map.map_perams.x*map.scale)/2),
+                                    (i*map.scale)-40.0f+2.5f,
                                     2.5f,
-                                    (j*map.scale)+2.5f-((map.map_perams.y*map.scale)/2)
+                                    (j*map.scale)-20.0f+2.5f
                                 },
                                 map.scale,
                                 5.0f,

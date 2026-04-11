@@ -12,4 +12,6 @@ public:
     
     void AddSegment(int x, int y);
     void AddWall(Vector2 first, Vector2 last);
+
+    void RemoveSegment(int x, int y);
 };
