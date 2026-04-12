@@ -15,6 +15,8 @@ int main(){
     bool camera_mode = true;
     Vector2 mousePos;
 
+    Vector3 centrecoords = {0.0f,2.5f,0.0f};
+
     //window setup
     InitWindow(1200,600,"3d-raylib");
     SetTargetFPS(60);
@@ -44,6 +46,7 @@ int main(){
     while (!WindowShouldClose()){
         //--
         //Logic
+        Vector3 oldPos = camera.position;
         UpdateCamera(&camera, CAMERA_FIRST_PERSON);
 
         //change camera mode if "1" key is pressed and changes cursor state
@@ -65,6 +68,14 @@ int main(){
                 Vector2 relMousePos = {(int)mousePos.x / 75, (int)mousePos.y / 75};
                 map.RemoveSegment(relMousePos.x,relMousePos.y);
             }
+        }
+
+        //collision
+
+        bool touch = map.Collide(camera.position, 1.0f, centrecoords, 2.0f);
+        if (touch) {
+            std::cout << "touch" << std::endl;
+            camera.position = oldPos;
         }
 
         //--
@@ -96,7 +107,7 @@ int main(){
                 }
 
                 //centre point marker
-                DrawCube({0.0f,2.5f,0.0f},2.0f,5.0f,1.0f,RED);
+                DrawCube(centrecoords,2.0f,5.0f,2.0f,RED);
 
                 //draw the floor grid
                 DrawGrid(30,5.0f);

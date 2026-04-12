@@ -44,3 +44,23 @@ void Map::AddWall(Vector2 first, Vector2 last)
         AddSegment(x,y);
     }
 }
+
+bool Map::Collide(Vector3 col1, float size1, Vector3 col2, float size2)
+{
+    //makes bounding boxes based off of Vector and size of the two objects you want to 
+    //test collision with, returns true if they collide, else false. (only cube bounding boxes)
+    if (CheckCollisionBoxes(
+        (BoundingBox){(Vector3){col1.x - size1/2,
+                                col1.y - size1/2,
+                                col1.z - size1/2},
+                      (Vector3){col1.x + size1/2,
+                                col1.y + size1/2,
+                                col1.z + size1/2}},
+        (BoundingBox){(Vector3){col2.x - size2/2,
+                                col2.y - size2/2,
+                                col2.z - size2/2},
+                      (Vector3){col2.x + size2/2,
+                                col2.y + size2/2,
+                                col2.z + size2/2}})) return true;
+    return false;
+}

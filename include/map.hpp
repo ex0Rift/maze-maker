@@ -12,6 +12,6 @@ public:
     
     void AddSegment(int x, int y);
     void AddWall(Vector2 first, Vector2 last);
-
+    bool Collide(Vector3 col1, float size1, Vector3 col2, float size2);
     void RemoveSegment(int x, int y);
 };
